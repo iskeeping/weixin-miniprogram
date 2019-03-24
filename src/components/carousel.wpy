@@ -1,0 +1,89 @@
+<style lang="less">
+  .carousel {
+    position: relative;
+    .carousel-con {
+      height: ~"280rpx";
+      .link {
+        display: block;
+        height: 100%;
+        width: 100%;
+        image {
+          height: 100%;
+          width: 100%;
+        }
+      }
+
+    }
+    .dots {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      text-align: center;
+      text {
+        display: inline-block;
+        width: ~"10rpx";
+        height: ~"10rpx";
+        margin: ~"3rpx 6rpx";
+        background-color: #fff;
+        border-radius: 50%;
+        &.active {
+          background-color: #e4393c;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="carousel">
+    <swiper autoplay="true" interval="10000" duration="300" class="carousel-con" bindchange="bindchange">
+      <repeat for="{{carouselData}}" key="index" index="index" item="item">
+        <swiper-item>
+          <view class="link" @tap="gotoGoodDetail({{item}})">
+            <image src="{{item.url}}"
+                   class="slide-image" mode="aspectFill" lazy-load="{{isLazyLoad}}"/>
+          </view>
+        </swiper-item>
+      </repeat>
+    </swiper>
+    <view class="dots">
+      <repeat for="{{carouselData}}" key="index" index="index" item="item">
+        <text class="{{index==currIndex?'active':''}}"></text>
+      </repeat>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class swipers extends wepy.component {
+    props = {
+      carouselData: {
+        type: Array,
+        default: []
+      }
+    }
+
+    data = {
+      currIndex: 0,
+      isLazyLoad: true
+    }
+    events = {}
+
+    watch = {}
+
+    methods = {
+      gotoGoodDetail(item) {
+        if (!item.id) {
+          return
+        }
+        wepy.navigateTo({
+          url: 'good-detail'
+        })
+      },
+      bindchange(e) {
+        this.currIndex = e.detail.current
+      }
+    }
+  }
+</script>

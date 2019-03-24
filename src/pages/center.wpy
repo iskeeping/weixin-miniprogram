@@ -1,0 +1,229 @@
+<style lang="less">
+  .center {
+    font-size: ~"32rpx";
+    .info {
+      height: ~"280rpx";
+      background-color: #fff;
+      border-bottom: ~"20rpx solid #f2f2f2";
+      position: relative;
+      text-align: center;
+      &:before {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        visibility: hidden;
+        width: 0;
+        height: 100%;
+      }
+      .info-i {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      .image {
+        display: inline-block;
+        width: ~"130rpx";
+        height: ~"130rpx";
+        border-radius: 50%;
+        overflow: hidden;
+        .image1 {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .desc {
+        display: block;
+        color: #000;
+        font-size: ~"28rpx";
+        line-height: ~"48rpx";
+      }
+    }
+    .steps {
+      overflow: hidden;
+      border-bottom: ~"20rpx solid #f2f2f2";
+      .item {
+        float: left;
+        width: 20%;
+        text-align: center;
+        padding: ~"35rpx 0";
+        image {
+          width: ~"42.5rpx";
+          height: ~"42.5rpx";
+        }
+        view {
+          color: #000;
+          font-size: ~"24rpx";
+          line-height: ~"30rpx";
+        }
+      }
+    }
+    .operations {
+      .item {
+        height: ~"100rpx";
+        line-height: ~"100rpx";
+        color: #999;
+        font-size: ~"28rpx";
+        border-bottom: ~"1rpx solid #f2f2f2";
+        position: relative;
+        padding: ~"0 25rpx";
+        image {
+          vertical-align: top;
+          &:first-child {
+            margin-top: ~"30rpx";
+            margin-right: ~"15rpx";
+            width: ~"40rpx";
+            height: ~"40rpx";
+          }
+          &:last-child {
+            position: absolute;
+            right: ~"25rpx";
+            top: 0;
+            margin-top: ~"38rpx";
+            width: ~"24rpx";
+            height: ~"24rpx";
+          }
+        }
+        text.absolute {
+          position: absolute;
+          top: 0;
+          right: ~"25rpx";
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="center">
+    <view class="info">
+      <view class="info-i">
+        <view class="image">
+          <image wx:if="{{isLogin}}" src="{{userInfo.pic_url}}" class="image1"></image>
+          <image wx:if="{{!isLogin}}" src="../resources/unlogin.png" class="image1"></image>
+        </view>
+        <view class="desc">
+          <view wx:if="{{isLogin}}">{{userInfo.username}}</view>
+          <view wx:if="{{!isLogin}}" @tap="gotoLogin">点击登录</view>
+        </view>
+      </view>
+    </view>
+    <view class="steps">
+      <view class="item" @tap="gotoSteps('all')">
+        <image src="../resources/list.png" mode="aspectFill"/>
+        <view>全部订单</view>
+      </view>
+      <view class="item" @tap="gotoSteps('nopay')">
+        <image src="../resources/pay.png" mode="aspectFill"/>
+        <view>待付款</view>
+      </view>
+      <view class="item" @tap="gotoSteps('nosend')">
+        <image src="../resources/send.png" mode="aspectFill"/>
+        <view>待发货</view>
+      </view>
+      <view class="item" @tap="gotoSteps('noreceive')">
+        <image src="../resources/shop.png" mode="aspectFill"/>
+        <view>待收货</view>
+      </view>
+      <view class="item" @tap="gotoSteps('receive')">
+        <image src="../resources/receive.png" mode="aspectFill"/>
+        <view>已收货</view>
+      </view>
+    </view>
+    <view class="operations">
+      <view class="item" @tap="gotoAddress">
+        <image src="../resources/location.png" mode="aspectFill"/>
+        <text>收货地址</text>
+        <image src="../resources/arrow.png" mode="aspectFill"/>
+      </view>
+      <view class="item">
+        <image src="../resources/version.png" mode="aspectFill"/>
+        <text>当前版本</text>
+        <text class="absolute">v1.0</text>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import {getUserById} from '@/api/api'
+
+  export default class center extends wepy.page {
+    config = {
+      navigationBarTitleText: '个人中心'
+    }
+    components = {}
+
+    mixins = []
+
+    data = {
+      userInfo: null,
+      isLogin: false,
+      icon: '',
+      name: ''
+    }
+
+    computed = {}
+    watch = {}
+    methods = {
+      gotoLogin() {
+        wepy.navigateTo({
+          url: 'login'
+        })
+      },
+      gotoSteps(step) {
+        let token = wepy.getStorageSync('token')
+        if (!token) {
+          wepy.showToast({
+            title: '请先登录',
+            icon: 'none',
+            duration: 200
+          })
+          return
+        }
+        wepy.navigateTo({
+          url: 'steps?step=' + step
+        })
+      },
+      gotoAddress() {
+        let token = wepy.getStorageSync('token')
+        if (!token) {
+          wepy.showToast({
+            title: '请先登录',
+            icon: 'none',
+            duration: 200
+          })
+          return
+        }
+        wepy.navigateTo({
+          url: 'address'
+        })
+      }
+    }
+
+    events = {}
+
+    async getUserById() {
+      let token = wepy.getStorageSync('token')
+      if (!token) {
+        return
+      }
+      if (this.userInfo) {
+        return
+      }
+      let res = await getUserById({token: token})
+      if (res.data.code === 200) {
+        this.isLogin = true
+        this.userInfo = res.data.data[0]
+        this.$apply()
+      }
+    }
+
+    onShareAppMessage() {
+    }
+
+    onReachBottom() {
+    }
+
+    onShow() {
+      this.getUserById()
+    }
+  }
+</script>

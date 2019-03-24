@@ -1,0 +1,471 @@
+<style lang="less">
+  .good-detail {
+    .link {
+      height: ~"280rpx";
+      display: block;
+      width: 100%;
+      image {
+        height: 100%;
+        width: 100%;
+      }
+    }
+    .title {
+      font-size: ~"32rpx";
+      color: #333;
+      font-weight: 700;
+      line-height: ~"62rpx";
+      margin: ~"0 25rpx";
+      padding-top: ~"18rpx";
+    }
+    .price, .other, .promise {
+      font-size: ~"24rpx";
+      color: #999;
+      line-height: ~"48rpx";
+      padding: ~"0 25rpx";
+    }
+    .price {
+      height: ~"60rpx";
+      line-height: ~"60rpx";
+      &:before {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        visibility: hidden;
+        width: 0;
+        height: 100%;
+      }
+      text {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      text:nth-of-type(1) {
+        font-size: ~"36rpx";
+        font-weight: 700;
+        color: #e4393c;
+        padding-right: ~"25rpx";
+        margin-right: ~"25rpx";
+        position: relative;
+      }
+    }
+    .other {
+      border-bottom: ~"1rpx solid ##f2f2f2";
+      padding-bottom: ~"10rpx";
+      overflow: hidden;
+      text {
+        width: 33.333333%;
+        float: left;
+      }
+    }
+    .number-property {
+      border-top: ~"1rpx solid #f2f2f2";
+      height: ~"80rpx";
+      line-height: ~"80rpx";
+      padding: ~"0 25rpx";
+      position: relative;
+      text {
+        font-size: ~"28rpx";
+        &:nth-of-type(1) {
+          color: #999;
+          margin-right: ~"25rpx";
+        }
+        &:nth-of-type(2) {
+          color: #000;
+        }
+      }
+      &:after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: ~"29rpx";
+        margin-top: ~"-10rpx";
+        width: ~"20rpx";
+        height: ~"20rpx";
+        border: ~"1rpx solid #999";
+        border-width: ~"1rpx 1rpx 0 0";
+        transform: rotate(45deg);
+      }
+    }
+    .promise {
+      padding-top: ~"10rpx";
+      padding-bottom: ~"10rpx";
+      background-color: #f2f2f2;
+      overflow: hidden;
+      text-align: center;
+      view {
+        display: inline-block;
+        padding: ~"0 35rpx";
+      }
+    }
+    .infos {
+      padding-bottom: ~"145rpx";
+      padding-top: ~"25rpx";
+      .tabs {
+        margin: ~"0 25rpx";
+        overflow: hidden;
+        .item {
+          height: ~"90rpx";
+          line-height: ~"90rpx";
+          width: ~"180rpx";
+          text-align: center;
+          float: left;
+          font-size: ~"28rpx";
+          background-color: #f2f2f2;
+          color: #333;
+        }
+      }
+      .cons {
+        margin: ~"0 25rpx";
+        padding-top: ~"25rpx";
+        > view {
+          &.introduction {
+            .p {
+              line-height: ~"48rpx";
+              font-size: ~"28rpx";
+              color: #333;
+            }
+            .image {
+              image {
+                vertical-align: top;
+                width: 100%;
+              }
+
+            }
+          }
+        }
+      }
+    }
+    .fixed-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: ~"120rpx";
+      overflow: hidden;
+      .cart, .add, .buy {
+        float: left;
+        height: ~"120rpx";
+        text-align: center;
+        width: 33.333333333%;
+      }
+      .cart {
+        background-color: #fff;
+        &:before {
+          content: '';
+          display: inline-block;
+          vertical-align: middle;
+          visibility: hidden;
+          width: 0;
+          height: 100%;
+        }
+        view {
+          display: inline-block;
+          vertical-align: middle;
+          image {
+            width: ~"45rpx";
+            height: ~"45rpx";
+          }
+          text {
+            font-size: ~"24rpx";
+            color: #333;
+            display: block;
+          }
+        }
+      }
+      .add, .buy {
+        line-height: ~"120rpx";
+        font-size: ~"32rpx";
+        color: #fff;
+      }
+      .add {
+        background-color: #ffad5d;
+      }
+      .buy {
+        background-color: #e4393c;
+      }
+    }
+    .select-number-property {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 100%;
+      right: 0;
+      width:100%;
+      transition: left 0s linear .3s;
+      .bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0);
+        transition: background-color .3s linear 0s;
+      }
+      &.active {
+        left: 0;
+        .bg {
+          background-color: rgba(0, 0, 0, .3);
+          transition-delay: .3s;
+        }
+      }
+      .in {
+        background-color: #fff;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: ~"0 25rpx";
+        box-sizing: border-box;
+        .top {
+          position: relative;
+          border-bottom: ~"1rpx solid #f2f2f2";
+          padding: ~"25rpx 0";
+          .slide-image {
+            vertical-align: top;
+            width: ~"200rpx";
+            height: ~"200rpx";
+          }
+          .desc {
+            position: absolute;
+            top: ~"25rpx";
+            left: 0;
+            right: 0;
+            height: ~"200rpx";
+            padding-left: ~"225rpx";
+            .price1 {
+              font-size: ~"36rpx";
+              color: #e4393c;
+            }
+            .name {
+              font-size: ~"28rpx";
+              color: #000;
+            }
+          }
+        }
+        .num {
+          position: relative;
+          margin-top: ~"25rpx";
+          padding-bottom: ~"25rpx";
+          > text {
+            font-size: ~"28rpx";
+            color: #000;
+          }
+          .btns {
+            position: absolute;
+            top: 0;
+            right: 0;
+            > view {
+              display: inline-block;
+              vertical-align: top;
+              width: ~"50rpx";
+              height: ~"50rpx";
+              text-align: center;
+              border: ~"1rpx solid #f2f2f2";
+              &:last-child {
+                margin-right: 0;
+              }
+              > image {
+                margin-top: ~"10rpx";
+                vertical-align: top;
+                width: ~"30rpx";
+                height: ~"30rpx";
+              }
+            }
+            > input {
+              height: ~"50rpx";
+              line-height: ~"50rpx";
+              border: ~"1rpx solid #f2f2f2";
+              border-width: ~"1rpx 0";
+              display: inline-block;
+              vertical-align: top;
+              width: auto;
+              padding: ~"0 20rpx";
+              font-size: ~"28rpx";
+              color: #333;
+              text-align: center;
+              max-width: ~"50rpx";
+              min-height: ~"1rpx";
+            }
+          }
+        }
+        .getCart {
+          height: ~"120rpx";
+          line-height: ~"120rpx";
+          background-color: #e4393c;
+          font-size: ~"32rpx";
+          color: #fff;
+          margin: ~"0 -25rpx";
+          text-align: center;
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="good-detail">
+    <view class="link">
+      <image src="{{goodData.pic_url}}"
+             class="slide-image" mode="aspectFill" lazy-load="{{isLazyLoad}}"/>
+    </view>
+    <view class="title">{{goodData.name}}</view>
+    <view class="price">
+      <text>&#165;{{goodData.retail_price}}</text>
+    </view>
+    <view class="other">
+      <text>库存：{{goodData.goods_number}}</text>
+      <text>销量：{{goodData.sell_volume}}</text>
+      <text>运费：5.00</text>
+    </view>
+    <view class="number-property" @tap="selectNumberProperty">
+      <text>已选</text>
+      <text>{{goodData.name}}x{{number}}</text>
+    </view>
+    <view class="promise">
+      <view>
+        <text>七天无理由退换货</text>
+      </view>
+      <view>
+        <text>48小时发货</text>
+      </view>
+      <view>
+        <text>微信支付</text>
+      </view>
+    </view>
+    <view class="infos">
+      <view class="tabs">
+        <view class="item">商品介绍</view>
+      </view>
+      <view class="cons">
+        <view class="introduction">
+          <view class="p">手xxxx机</view>
+          <view class="image">
+            <image src="https://img13.360buyimg.com/cms/jfs/t18796/78/1955036695/80802/f386c6d1/5aded176N0f40ad35.jpg"
+                   mode="aspectFill"/>
+          </view>
+        </view>
+      </view>
+    </view>
+    <view class="fixed-bar">
+      <view class="cart" @tap="gotoCart">
+        <view>
+          <image src="../resources/cart.png" mode="aspectFill"/>
+          <text>购物车</text>
+        </view>
+      </view>
+      <view class="add">加入购物车</view>
+      <view class="buy" @tap="gotoBuy">立即购买</view>
+    </view>
+    <view class="select-number-property {{isShowSelectNumberProperty?'active':''}}">
+      <view class="bg" @tap="close"></view>
+      <view class="in">
+        <view class="top">
+          <image src="{{goodData.pic_url}}"
+                 class="slide-image" mode="aspectFill" lazy-load="{{isLazyLoad}}"/>
+          <view class="desc">
+            <view class="price1">&#165;{{goodData.retail_price}}</view>
+            <view class="name">{{goodData.name}}</view>
+          </view>
+        </view>
+        <view class="num">
+          <text>购买数量</text>
+          <view class="btns">
+            <view class="sub" @tap="sub({{index}})">
+              <image mode="aspectFill" src="../resources/move1.png"/>
+            </view>
+            <input type="number" class="text" value="{{item.buynum}}"></input>
+            <view class="sup" @tap="sup({{index}})">
+              <image mode="aspectFill" src="../resources/add1.png"/>
+            </view>
+          </view>
+        </view>
+        <view class="getCart">加入购物车</view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import carousel from '@/components/carousel'
+  import {getGoodsById} from '@/api/api'
+
+  export default class good extends wepy.page {
+    config = {
+      navigationBarTitleText: '产品详情'
+    }
+    components = {
+      carousel
+    }
+
+    mixins = []
+
+    data = {
+      carouselData: [{
+        link: '',
+        url: 'https://m.360buyimg.com/mobilecms/s750x366_jfs/t19660/272/2730522822/219511/8c874448/5b054610N2da9131f.jpg!cr_1125x549_0_72!q70.jpg.dpg'
+      }, {
+        link: '',
+        url: 'https://m.360buyimg.com/mobilecms/s750x366_jfs/t19660/272/2730522822/219511/8c874448/5b054610N2da9131f.jpg!cr_1125x549_0_72!q70.jpg.dpg'
+      }],
+      id: '',
+      goodData: null,
+      number: 1,
+      isShowSelectNumberProperty: false
+    }
+
+    computed = {}
+    watch = {}
+    methods = {
+      gotoCart() {
+        wepy.switchTab({
+          url: 'cart'
+        })
+      },
+      gotoBuy() {
+        wepy.navigateTo({
+          url: 'buy'
+        })
+      },
+      selectNumberProperty() {
+        this.isShowSelectNumberProperty = true
+      },
+      close() {
+        this.isShowSelectNumberProperty = false
+      }
+    }
+
+    events = {}
+
+    setId() {
+      let _this = this
+      let pages = _this.getCurrentPages()
+      let page = pages[pages.length - 1]
+      let options = page.options
+      _this.id = options.id
+    }
+
+    async getGoodsById() {
+      let _this = this
+      let param = {
+        id: _this.id
+      }
+      let res = await getGoodsById(param)
+      if (res.data.code === 200) {
+        if (res.data.data.length > 0) {
+          _this.goodData = res.data.data[0]
+        }
+      }
+    }
+
+    onShareAppMessage() {
+    }
+
+    async init() {
+      this.setId()
+      await this.getGoodsById()
+      this.$apply()
+    }
+
+    onLoad() {
+      this.init()
+    }
+  }
+</script>

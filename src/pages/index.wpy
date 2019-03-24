@@ -1,0 +1,186 @@
+<style lang="less">
+  .index {
+    .tabs {
+      background-color: #fff;
+      border-bottom: ~"1rpx solid #f2f2f2";
+      text-align: center;
+      view {
+        vertical-align: top;
+        display: inline-block;
+        height: ~"82rpx";
+        line-height: ~"82rpx";
+        padding: ~"0 25rpx";
+        color: #333;
+        font-size: ~"28rpx";
+        &.active {
+          color: #e4393c;
+        }
+      }
+    }
+    .list {
+      margin: ~"0 12.5rpx";
+    }
+    .promise {
+      font-size: ~"24rpx";
+      color: #999;
+      line-height: ~"48rpx";
+      padding: ~"0 25rpx";
+      padding-top: ~"10rpx";
+      padding-bottom: ~"10rpx";
+      background-color: #fff;
+      border-bottom: ~"20rpx solid #f2f2f2";
+      overflow: hidden;
+      text-align: center;
+      view {
+        display: inline-block;
+        padding: ~"0 35rpx";
+      }
+    }
+  }
+</style>
+<template>
+  <view class="index">
+    <carousel :carouselData.sync="adsData"></carousel>
+    <view class="promise">
+      <view>
+        <text>七天无理由退换货</text>
+      </view>
+      <view>
+        <text>48小时发货</text>
+      </view>
+      <view>
+        <text>微信支付</text>
+      </view>
+    </view>
+    <view class="tabs">
+      <repeat for="{{categorysData}}" key="index" index="index" item="item">
+        <view class="{{currIndex==index?'active':''}}" data-index="{{index}}" @tap="gotoTab">{{item.name}}</view>
+      </repeat>
+    </view>
+    <view class="list">
+      <repeat for="{{goodsData}}" key="index" index="index" item="item">
+        <good :itemData.sync="item"></good>
+      </repeat>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import carousel from '@/components/carousel'
+  import good from '@/components/good'
+  import {
+    getCategorys,
+    getAds,
+    getGoodsListByCategoryId
+  } from '@/api/api'
+
+  export default class center extends wepy.page {
+    config = {
+      navigationBarTitleText: '首页'
+    }
+    components = {
+      carousel,
+      good
+    }
+
+    mixins = []
+
+    data = {
+      id: '',
+      currIndex: 0,
+      adsData: null,
+      categorysData: null,
+      goodsData: null
+    }
+
+    computed = {}
+    watch = {}
+    methods = {
+      async gotoTab(e) {
+        let index = e.target.dataset.index
+        this.currIndex = index
+        this.id = this.categorysData[index].id
+        await this.getGoodsListByCategoryId()
+        this.$apply()
+      }
+    }
+
+    events = {}
+
+    async getAdsData() {
+      let _this = this
+      let param = _this.params
+      let res = await getAds(param)
+      let adsData = []
+      if (res.data.code === 200) {
+        res.data.data.forEach(function (itm) {
+          adsData.push({
+            link: itm.link,
+            url: itm.image_url
+          })
+        })
+      }
+      _this.adsData = adsData
+    }
+
+    async getGoodsListByCategoryId() {
+      let _this = this
+      let param = {
+        id: _this.id
+      }
+      let res = await getGoodsListByCategoryId(param)
+      let goodsData = []
+      if (res.data.code === 200) {
+        res.data.data.forEach(function (itm) {
+          goodsData.push({
+            link: itm.link,
+            url: itm.pic_url,
+            name: itm.name,
+            price: itm.retail_price,
+            sellVolume: itm.sell_volume,
+            id: itm.id
+          })
+        })
+      }
+      _this.goodsData = goodsData
+    }
+
+    async getCategorysData() {
+      let _this = this
+      let param = _this.params
+      let res = await getCategorys(param)
+      let categorysData = []
+      if (res.data.code === 200) {
+        res.data.data.forEach(function (itm, index) {
+          if (index === 0) {
+            _this.id = itm.id
+          }
+          categorysData.push({
+            id: itm.id,
+            name: itm.name
+          })
+        })
+      }
+      _this.categorysData = categorysData
+    }
+
+    onShareAppMessage() {
+    }
+
+    onReachBottom() {
+    }
+
+    async init() {
+      this.currIndex = 0
+      await this.getAdsData()
+      await this.getCategorysData()
+      await this.getGoodsListByCategoryId()
+      this.$apply()
+
+    }
+
+    onShow() {
+      this.init()
+    }
+  }
+</script>

@@ -1,0 +1,84 @@
+<style lang="less">
+  .container {
+  }
+</style>
+
+<script>
+  import wepy from 'wepy'
+  import 'wepy-async-function'
+
+  export default class extends wepy.app {
+    config = {
+      pages: [
+        'pages/index',
+        'pages/cart',
+        'pages/center',
+        'pages/good-detail',
+        'pages/address',
+        'pages/buy',
+        'pages/steps',
+        'pages/orders',
+        'pages/login',
+        'pages/address-manage'
+      ],
+      window: {
+        backgroundTextStyle: 'light',
+        navigationBarBackgroundColor: '#fff',
+        navigationBarTitleText: 'WeChat',
+        navigationBarTextStyle: 'black'
+      },
+      networkTimeout: {
+        request: 10000,
+        downloadFile: 10000
+      },
+      tabBar: {
+        color: '#333',
+        selectedColor: '#e4393c',
+        borderStyle: 'white',
+        backgroundColor: '#fff',
+        list: [{
+          pagePath: 'pages/index',
+          text: '首页',
+          iconPath: 'resources/home.png',
+          selectedIconPath: 'resources/home_active.png'
+        }, {
+          pagePath: 'pages/cart',
+          text: '购物车',
+          iconPath: 'resources/cart.png',
+          selectedIconPath: 'resources/cart_active.png'
+        }, {
+          pagePath: 'pages/center',
+          text: '个人中心',
+          iconPath: 'resources/my.png',
+          selectedIconPath: 'resources/my_active.png'
+        }]
+      },
+      debug: true
+    }
+
+    globalData = {
+      systemInfo: null
+    }
+
+    data = {}
+
+    constructor() {
+      super()
+      this.use('requestfix')
+      this.use('promisify')
+    }
+
+    setSystemInfo() {
+      try {
+        let res = wepy.getSystemInfoSync()
+        this.globalData.systemInfo = res
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    onLaunch() {
+      this.setSystemInfo()
+    }
+  }
+</script>

@@ -1,0 +1,196 @@
+<style lang="less">
+  .orders {
+    .con {
+      .list {
+        .item {
+          .order {
+            padding: ~"11rpx 25rpx";
+            padding-right: ~"120rpx";
+            position: relative;
+            font-size: ~"24rpx";
+            line-height: ~"52rpx";
+            border-bottom: ~"1rpx solid #f2f2f2";
+            .itm {
+              color: #000;
+            }
+            .state {
+              height: ~"52rpx";
+              position: absolute;
+              top: 50%;
+              margin-top: ~"-27rpx";
+              right: ~"25rpx";
+              color: #e4393c;
+            }
+          }
+          .item1 {
+            border-bottom: ~"1rpx solid #f2f2f2";
+            padding: ~"15rpx 0";
+            position: relative;
+            .image {
+              height: ~"160rpx";
+              margin: ~"0 25rpx";
+              position: relative;
+              .image1 {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: ~"160rpx";
+                width: ~"160rpx";
+              }
+              .info {
+                margin-left: ~"160rpx";
+                height: ~"160rpx";
+                &:before {
+                  content: '';
+                  display: inline-block;
+                  vertical-align: middle;
+                  visibility: hidden;
+                  width: 0;
+                  height: 100%;
+                }
+                .info-con {
+                  width: 100%;
+                  display: inline-block;
+                  vertical-align: middle;
+                  padding-left: ~"25rpx";
+                  box-sizing: border-box;
+                  .title {
+                    line-height: ~"48rpx";
+                    font-size: ~"28rpx";
+                    color: #000;
+                    height: ~"48rpx";
+                  }
+                  .style {
+                    line-height: ~"44rpx";
+                    font-size: ~"24rpx";
+                    color: #999;
+                  }
+                  .desc {
+                    line-height: ~"44rpx";
+                    font-size: ~"24rpx";
+                    color: #e4393c;
+                    position: relative;
+                    text-align: right;
+                    .price {
+                      display: inline;
+                      text {
+                        color: #333;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .footer {
+            text-align: right;
+            font-size: ~"24rpx";
+            border-bottom: ~"20rpx solid #f2f2f2";
+            .total {
+              padding: ~"0 25rpx";
+              line-height: ~"80rpx";
+              border-bottom: ~"1rpx solid #f2f2f2";
+            }
+            .btns {
+              display: inline-block;
+              vertical-align: top;
+              overflow: hidden;
+              padding: ~"15rpx 25rpx";
+              view {
+                float: left;
+                margin-left: ~"15rpx";
+                height: ~"80rpx";
+                line-height: ~"80rpx";
+                padding: ~"0 30rpx";
+                border: ~"1rpx solid #f2f2f2";
+                border-radius: ~"5rpx";
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="orders">
+    <view class="con">
+      <view class="list">
+        <view class="item">
+          <view class="order">
+            <view class="itm">订单：2320565665454</view>
+            <view class="itm">时间：2320565665454</view>
+            <view class="state">待付款</view>
+          </view>
+          <repeat for="{{cartListData}}" key="index" index="index" item="item">
+            <view class="item1">
+              <view class="image">
+                <image src="{{item.url}}" mode="aspectFill" class="image1"/>
+                <view class="info">
+                  <view class="info-con">
+                    <view class="title">面膜</view>
+                    <view class="style">天蓝色</view>
+                    <view class="desc">
+                      <view class="price">&#165;100.00
+                        <text>*2</text>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </repeat>
+          <view class="footer">
+            <view class="total">实付金额：&#165;100.00</view>
+            <view class="btns">
+              <view class="">删除订单</view>
+              <view class="">付款</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class steps extends wepy.page {
+    config = {
+      navigationBarTitleText: '流程'
+    }
+    components = {}
+
+    mixins = []
+
+    data = {
+      cartListData: [
+        {
+          isSelect: false,
+          url: 'http://m.360buyimg.com/mobilecms/jfs/t17695/42/1869642283/68721/553c7a38/5add8c32Ne3c9451b.png',
+          buynum: 1
+        },
+        {
+          isSelect: false,
+          url: 'http://m.360buyimg.com/mobilecms/jfs/t17695/42/1869642283/68721/553c7a38/5add8c32Ne3c9451b.png',
+          buynum: 1
+        }
+      ]
+    }
+
+    computed = {}
+    watch = {}
+    methods = {}
+
+    events = {}
+
+    onShareAppMessage() {
+    }
+
+    onReachBottom() {
+    }
+
+    onLoad() {
+    }
+  }
+</script>

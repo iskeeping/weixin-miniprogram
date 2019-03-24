@@ -1,0 +1,83 @@
+<style lang="less">
+  .good {
+    vertical-align: top;
+    display: inline-block;
+    width: 33.3333%;
+    box-sizing: border-box;
+    position: relative;
+    padding: ~"0 12.5rpx";
+    margin-top: ~"25rpx";
+    image {
+      width: 100%;
+      height: ~"240rpx";
+    }
+    .psc {
+      > view {
+        width: 100%;
+        .title {
+          font-size: ~"28rpx";
+          color: #333;
+          line-height: ~"42rpx";
+          max-height: ~"84rpx";
+          overflow: hidden;
+        }
+        .info {
+          font-size: ~"24rpx";
+          line-height: ~"38rpx";
+          overflow: hidden;
+          white-space: nowrap;
+          view {
+            display: inline;
+          }
+          view:nth-of-type(1) {
+            color: #e93b3d;
+          }
+          view:nth-of-type(2) {
+            float: right;
+            color: #999;
+          }
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="good" @tap="gotoGoodDetail({{itemData}})">
+    <image src="{{itemData.url}}" mode="aspectFill" lazy-load="{{isLazyLoad}}"/>
+    <view class="psc">
+      <view>
+        <view class="title">{{itemData.name}}</view>
+        <view class="info">
+          <view>&#165;{{itemData.price}}</view>
+          <view>销量{{itemData.sellVolume}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class good extends wepy.component {
+    props = {
+      itemData: {
+        type: Object,
+        default: {}
+      }
+    }
+
+    data = {
+      isLazyLoad: true
+    }
+    events = {}
+    watch = {}
+
+    methods = {
+      gotoGoodDetail(item) {
+        wepy.navigateTo({
+          url: 'good-detail?id=' + item.id
+        })
+      }
+    }
+  }
+</script>

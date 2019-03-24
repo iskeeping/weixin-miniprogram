@@ -1,0 +1,225 @@
+<style lang="less">
+  .address {
+    .list {
+      padding-bottom: ~"140rpx";
+      .item {
+        font-size: ~"28rpx";
+        color: #999;
+        line-height: ~"52rpx";
+        .user, .city, .detail {
+          margin: ~"0 25rpx";
+        }
+        .user, .city {
+          text {
+            margin-right: ~"15rpx";
+          }
+        }
+        .user {
+          margin-top: ~"22rpx";
+        }
+        .detail {
+        }
+        .tool {
+          padding: ~"0 25rpx";
+          margin-top: ~"22rpx";
+          border-top: ~"1rpx solid #f2f2f2";
+          border-bottom: ~"20rpx solid #f2f2f2";
+          height: ~"90rpx";
+          line-height: ~"90rpx";
+          overflow: hidden;
+          .select-icon {
+            font-size: ~"28rpx";
+            color: #000;
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            &.active {
+              > view {
+                &:nth-of-type(1) {
+                  &:before {
+                    background-color: #e93b3d;
+                    border: 0;
+                  }
+                  &:after {
+                    content: '';
+                    position: absolute;
+                    top: ~"15rpx";
+                    left: ~"12rpx";
+                    width: ~"16rpx";
+                    height: ~"10rpx";
+                    border: ~"1rpx solid #fff";
+                    border-width: ~"1rpx 1rpx 0 0";
+                    box-sizing: border-box;
+                    transform: rotate(135deg);
+                    transform-origin: center center;
+                  }
+                }
+              }
+            }
+            > view {
+              display: inline-block;
+              vertical-align: top;
+              margin: ~"30rpx 0";
+              width: ~"40rpx";
+              height: ~"40rpx";
+              line-height: ~"40rpx";
+              &:nth-of-type(2) {
+                width: auto;
+                margin-left: ~"15rpx";
+              }
+              &:nth-of-type(1) {
+                position: relative;
+                &:before {
+                  content: '';
+                  display: inline-block;
+                  width: ~"40rpx";
+                  height: ~"40rpx";
+                  background-color: #fff;
+                  border: ~"1rpx solid #999";
+                  box-sizing: border-box;
+                  border-radius: 50%;
+                }
+              }
+            }
+          }
+          .operation {
+            float: right;
+            .del, .edit {
+              float: left;
+              image {
+                vertical-align: top;
+                width: ~"40rpx";
+                height: ~"40rpx";
+                margin-right: ~"15rpx";
+                margin-top: ~"25rpx";
+              }
+            }
+            .del {
+            }
+            .edit {
+              margin-right: ~"15rpx";
+            }
+          }
+        }
+      }
+    }
+    .fixed-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: ~"25rpx";
+      background-color: #f2f2f2;
+      > view {
+        background-color: #e4393c;
+        height: ~"90rpx";
+        line-height: ~"90rpx";
+        text-align: center;
+        border-radius: ~"10rpx";
+        text {
+          margin-left: ~"15rpx";
+          color: #fff;
+          font-size: ~"28rpx";
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="address">
+    <view class="list">
+      <repeat for="{{addressesData}}" key="index" index="index" item="item">
+        <view class="item">
+          <view class="user">
+            <text>{{item.name}}</text>
+            <text>{{item.mobile}}</text>
+          </view>
+          <view class="city">
+            <text>{{item.province_name}}</text>
+            <text>{{item.city_name}}</text>
+            <text>{{item.area_name}}</text>
+          </view>
+          <view class="detail">{{item.detail}}</view>
+          <view class="tool">
+            <view class="select-icon {{item.isSelect?'active':''}}" @tap="toggleSelect({{index}})">
+              <view></view>
+              <view>设为默认</view>
+            </view>
+            <view class="operation">
+              <view class="edit" @tap="editAddress({{item}})">
+                <image src="../resources/edit.png" mode="aspectFill"/>
+                <text>编辑</text>
+              </view>
+              <view class="del">
+                <image src="../resources/delete.png" mode="aspectFill"/>
+                <text>删除</text>
+              </view>
+            </view>
+          </view>
+        </view>
+      </repeat>
+    </view>
+    <view class="fixed-bar">
+      <view @tap="editAddress">
+        <text>增加新地址</text>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import {getAddressesByUserId} from '@/api/api'
+
+  export default class center extends wepy.page {
+    config = {
+      navigationBarTitleText: '收货地址'
+    }
+    components = {}
+
+    mixins = []
+
+    data = {
+      addressesData: null
+    }
+
+    computed = {}
+    watch = {}
+    methods = {
+      editAddress(item) {
+        wepy.navigateTo({
+          url: 'address-manage' + (typeof item.id !== 'undefined' ? ('?id=' + item.id) : '')
+        })
+      },
+      toggleSelect(index) {
+        let listData = this.listData
+        if (listData[index].isSelect) {
+          listData[index].isSelect = false
+        } else {
+          listData[index].isSelect = true
+        }
+      }
+    }
+
+    async getAddressesByUserId() {
+      let _this = this
+      let param = {token: wepy.getStorageSync('token')}
+      let res = await getAddressesByUserId(param)
+      if (res.data.code === 200) {
+        _this.addressesData = res.data.data
+        this.$apply()
+      }
+    }
+
+    events = {}
+
+    onShareAppMessage() {
+    }
+
+    onReachBottom() {
+    }
+
+    onShow() {
+      this.getAddressesByUserId()
+    }
+  }
+</script>

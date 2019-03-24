@@ -1,0 +1,446 @@
+<style lang="less">
+  .cart {
+    width: 100%;
+    height: 100%;
+    .cart-list {
+      padding-bottom: ~"120rpx";
+      .item {
+        border-bottom: ~"1rpx solid #f2f2f2";
+        padding: ~"15rpx 0";
+        position: relative;
+        .select-icon {
+          font-size: ~"24rpx";
+          color: #000;
+          margin-left: ~"25rpx";
+          position: absolute;
+          top: ~"15rpx";
+          left: 0;
+          &.active {
+            > view {
+              &:nth-of-type(1) {
+                &:before {
+                  background-color: #e93b3d;
+                  border: 0;
+                }
+                &:after {
+                  content: '';
+                  position: absolute;
+                  top: ~"15rpx";
+                  left: ~"12rpx";
+                  width: ~"16rpx";
+                  height: ~"10rpx";
+                  border: ~"1rpx solid #fff";
+                  border-width: ~"1rpx 1rpx 0 0";
+                  box-sizing: border-box;
+                  transform: rotate(135deg);
+                  transform-origin: center center;
+                }
+              }
+            }
+          }
+          > view {
+            display: inline-block;
+            vertical-align: top;
+            margin: ~"65rpx 0";
+            width: ~"40rpx";
+            height: ~"40rpx";
+            line-height: ~"40rpx";
+            &:nth-of-type(1) {
+              position: relative;
+              &:before {
+                content: '';
+                display: inline-block;
+                width: ~"40rpx";
+                height: ~"40rpx";
+                background-color: #fff;
+                border: ~"1rpx solid #999";
+                box-sizing: border-box;
+                border-radius: 50%;
+              }
+            }
+          }
+        }
+        .image {
+          height: ~"160rpx";
+          margin-left: ~"80rpx";
+          margin-right: ~"25rpx";
+          position: relative;
+          .image1 {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: ~"160rpx";
+            width: ~"160rpx";
+          }
+          .info {
+            margin-left: ~"160rpx";
+            height: ~"160rpx";
+            &:before {
+              content: '';
+              display: inline-block;
+              vertical-align: middle;
+              visibility: hidden;
+              width: 0;
+              height: 100%;
+            }
+            .info-con {
+              width: 100%;
+              display: inline-block;
+              vertical-align: middle;
+              padding-left: ~"25rpx";
+              box-sizing: border-box;
+              .title {
+                line-height: ~"48rpx";
+                font-size: ~"28rpx";
+                color: #000;
+                height: ~"48rpx";
+              }
+              .style {
+                line-height: ~"44rpx";
+                font-size: ~"24rpx";
+                color: #999;
+              }
+              .desc {
+                line-height: ~"44rpx";
+                font-size: ~"24rpx";
+                color: #e4393c;
+                position: relative;
+                .price {
+                  display: inline;
+                }
+                .btns {
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                  > view {
+                    display: inline-block;
+                    vertical-align: top;
+                    width: ~"50rpx";
+                    height: ~"50rpx";
+                    text-align: center;
+                    border: ~"1rpx solid #f2f2f2";
+                    margin-top: ~"-6rpx";
+                    &:last-child {
+                      margin-right: 0;
+                    }
+                    > image {
+                      margin-top: ~"10rpx";
+                      vertical-align: top;
+                      width: ~"30rpx";
+                      height: ~"30rpx";
+                    }
+                  }
+                  > input {
+                    height: ~"50rpx";
+                    line-height: ~"50rpx";
+                    border: ~"1rpx solid #f2f2f2";
+                    border-width: ~"1rpx 0";
+                    display: inline-block;
+                    vertical-align: top;
+                    width: auto;
+                    padding: ~"0 20rpx";
+                    margin-top: ~"-6rpx";
+                    font-size: ~"28rpx";
+                    color: #333;
+                    text-align: center;
+                    max-width: ~"50rpx";
+                    min-height: ~"1rpx";
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .fixed-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: ~"120rpx";
+      border-top: ~"1rpx solid ##f2f2f2";
+      background-color: #fff;
+      .select-icon {
+        font-size: ~"28rpx";
+        color: #000;
+        margin-left: ~"25rpx";
+        display: inline-block;
+        vertical-align: top;
+        position: relative;
+        &.active {
+          > view {
+            &:nth-of-type(1) {
+              &:before {
+                background-color: #e93b3d;
+                border: 0;
+              }
+              &:after {
+                content: '';
+                position: absolute;
+                top: ~"15rpx";
+                left: ~"12rpx";
+                width: ~"16rpx";
+                height: ~"10rpx";
+                border: ~"1rpx solid #fff";
+                border-width: ~"1rpx 1rpx 0 0";
+                box-sizing: border-box;
+                transform: rotate(135deg);
+                transform-origin: center center;
+              }
+            }
+          }
+        }
+        > view {
+          display: inline-block;
+          vertical-align: top;
+          margin: ~"45rpx 0";
+          width: ~"40rpx";
+          height: ~"40rpx";
+          line-height: ~"40rpx";
+          &:nth-of-type(2) {
+            width: auto;
+            margin-left: ~"25rpx";
+          }
+          &:nth-of-type(1) {
+            position: relative;
+            &:before {
+              content: '';
+              display: inline-block;
+              width: ~"40rpx";
+              height: ~"40rpx";
+              background-color: #fff;
+              border: ~"1rpx solid #999";
+              box-sizing: border-box;
+              border-radius: 50%;
+            }
+          }
+        }
+      }
+      .right {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        overflow: hidden;
+        .total, .buy {
+          float: left;
+        }
+        .total {
+          height: 100%;
+          &:before {
+            content: '';
+            display: inline-block;
+            vertical-align: middle;
+            width: 0;
+            height: 100%;
+            visibility: hidden;
+          }
+          > view {
+            display: inline-block;
+            vertical-align: middle;
+            margin: ~"0 25rpx";
+            margin-top: ~"4rpx";
+            > view {
+              line-height: ~"36rpx";
+              &:nth-of-type(1) {
+                font-size: ~"24rpx";
+                color: #333;
+                text:nth-of-type(2) {
+                  color: #e4393c;
+                  font-size: ~"32rpx";
+                }
+              }
+              &:nth-of-type(2) {
+                text-align: right;
+                color: #999;
+                font-size: ~"24rpx";
+              }
+            }
+          }
+        }
+        .buy {
+          line-height: ~"120rpx";
+          padding: ~"0 50rpx";
+          background-color: #e4393c;
+          color: #fff;
+          font-size: ~"28rpx";
+        }
+      }
+    }
+    .unlogin {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      &:before {
+        content: '';
+        display: inline-block;
+        vertical-align: middle;
+        height: 100%;
+        width: 0;
+        visibility: hidden;
+      }
+      .unlogin-i {
+        display: inline-block;
+        vertical-align: middle;
+        width: 100%;
+        text-align: center;
+        font-size: ~"30rpx";
+        color: #333;
+        .login {
+          margin: 0 auto;
+          margin-top: ~"25rpx";
+          width: ~"300rpx";
+          height: ~"80rpx";
+          line-height: ~"80rpx";
+          text-align: center;
+          border: ~"1rpx solid #f2f2f2";
+        }
+      }
+    }
+  }
+</style>
+<template>
+  <view class="cart">
+    <block wx:if="{{isLogin}}">
+      <view class="cart-list">
+        <repeat for="{{cartListData}}" key="index" index="index" item="item">
+          <view class="item">
+            <view class="select-icon {{item.isSelect?'active':''}}" @tap="toggleSelect({{index}})">
+              <view></view>
+            </view>
+            <view class="image">
+              <image src="{{item.url}}" mode="aspectFill" class="image1"/>
+              <view class="info">
+                <view class="info-con">
+                  <view class="title">面膜</view>
+                  <view class="style">天蓝色</view>
+                  <view class="desc">
+                    <view class="price">&#165;100.00</view>
+                    <view class="btns">
+                      <view class="sub" @tap="sub({{index}})">
+                        <image mode="aspectFill" src="../resources/move1.png"/>
+                      </view>
+                      <input type="number" class="text" value="{{item.buynum}}"></input>
+                      <view class="sup" @tap="sup({{index}})">
+                        <image mode="aspectFill" src="../resources/add1.png"/>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </repeat>
+      </view>
+      <view class="fixed-bar">
+        <view class="select-icon {{isSelectAll?'active':''}}" @tap="toggleSelectAll">
+          <view></view>
+          <view>全选</view>
+        </view>
+        <view class="right">
+          <view class="total">
+            <view>
+              <view>
+                <text>合计：</text>
+                <text>&#165;100.00</text>
+              </view>
+              <view>
+                <text>不含运费</text>
+              </view>
+            </view>
+          </view>
+          <view class="buy" @tap="gotoBuy">结算(1)</view>
+        </view>
+      </view>
+    </block>
+    <block wx:if="{{!isLogin}}">
+      <view class="unlogin">
+        <view class="unlogin-i">
+          <view class="login" @tap="gotoLogin">点击登录</view>
+        </view>
+      </view>
+    </block>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class cart extends wepy.page {
+    config = {
+      navigationBarTitleText: '购物车'
+    }
+    components = {}
+
+    mixins = []
+
+    data = {
+      isSelectAll: false,
+      cartListData: [
+        {
+          isSelect: false,
+          url: 'http://m.360buyimg.com/mobilecms/jfs/t17695/42/1869642283/68721/553c7a38/5add8c32Ne3c9451b.png',
+          buynum: 1
+        },
+        {
+          isSelect: false,
+          url: 'http://m.360buyimg.com/mobilecms/jfs/t17695/42/1869642283/68721/553c7a38/5add8c32Ne3c9451b.png',
+          buynum: 1
+        }
+      ],
+      isLogin: false
+    }
+
+    computed = {}
+    watch = {}
+    methods = {
+      gotoBuy() {
+        wepy.navigateTo({
+          url: 'buy'
+        })
+      },
+      gotoLogin() {
+        wepy.navigateTo({
+          url: 'login'
+        })
+      },
+      sub(index) {
+        let item = this.cartListData[index]
+        item.buynum = item.buynum - 1
+      },
+      sup(index) {
+        let item = this.cartListData[index]
+        item.buynum = item.buynum + 1
+      },
+      toggleSelect(index) {
+        let item = this.cartListData[index]
+        if (item.isSelect) {
+          item.isSelect = false
+        } else {
+          item.isSelect = true
+        }
+      },
+      toggleSelectAll() {
+        if (this.isSelectAll) {
+          this.isSelectAll = false
+        } else {
+          this.isSelectAll = true
+        }
+      }
+    }
+
+    events = {}
+
+    onShareAppMessage() {
+    }
+
+    onReachBottom() {
+    }
+
+    onShow() {
+      this.isLogin = wepy.getStorageSync('token') || false
+    }
+  }
+</script>

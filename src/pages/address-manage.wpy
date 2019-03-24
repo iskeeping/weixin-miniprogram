@@ -1,0 +1,465 @@
+<style lang="less">
+  .address-manage {
+    .form {
+      padding: ~"0 25rpx";
+      .text, input {
+        font-size: ~"28rpx";
+        color: #333;
+        height: ~"74rpx";
+        line-height: ~"72rpx";
+        box-sizing: border-box;
+        border: ~"1rpx solid #f2f2f2";
+        margin: ~"25rpx 0";
+        padding: ~"0 15rpx";
+      }
+      .text {
+        /*padding: ~"20rpx 0";*/
+      }
+    }
+    .confirm-i {
+      padding: ~"25rpx";
+      background-color: #f2f2f2;
+      .confirm {
+        font-size: ~"32rpx";
+        height: ~"90rpx";
+        line-height: ~"90rpx";
+        text-align: center;
+        border-radius: ~"10rpx";
+        color: #fff;
+        background-color: #e4393c;
+      }
+    }
+    .select-address {
+      position: fixed;
+      top: 0;
+      left: 100%;
+      width: 100%;
+      height: 100%;
+      transition: left 0s linear .3s;
+      z-index: 100;
+      &.active {
+        left: 0;
+        .bg {
+          background-color: rgba(0, 0, 0, .3);
+          transition-delay: .3s;
+        }
+      }
+      .bg {
+        background-color: rgba(0, 0, 0, 0);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        transition: background-color .3s linear 0s;
+      }
+      .in {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: ~"0 25rpx";
+        background-color: #fff;
+        .tabs {
+          overflow: hidden;
+          border-bottom: ~"1rpx solid #f2f2f2";
+          margin: ~"0 -25rpx";
+          position: relative;
+          .tab {
+            margin-left: ~"25rpx";
+            float: left;
+            height: ~"80rpx";
+            line-height: ~"80rpx";
+            font-size: ~"32rpx";
+            &.active {
+              color: #e4393c;
+            }
+          }
+          .confirm {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: ~"80rpx";
+            line-height: ~"80rpx";
+            font-size: ~"32rpx";
+            padding: ~"0 25rpx";
+          }
+        }
+        .cons {
+          height: ~"420rpx";
+          overflow: scroll;
+          -webkit-overflow-scrolling: touch;
+          .con {
+            display: none;
+            &.active {
+              display: block;
+            }
+            .item {
+              font-size: ~"32rpx";
+              height: ~"80rpx";
+              line-height: ~"80rpx";
+              border-bottom: ~"1rpx solid #f2f2f2";
+              &.active {
+                color: #e4393c;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+</style>
+<template>
+  <view class="address-manage">
+    <view class="form">
+      <input type="text" placeholder="请输入姓名" value="{{name}}" bindinput="setName"/>
+      <input type="number" placeholder="请输入电话" value="{{mobile}}" bindinput="setMobile"/>
+      <view class="text" @tap="selectAddress">{{addressShow ? addressShow : '选择地区'}}</view>
+      <input type="text" placeholder="请输入详细街道地址" value="{{address}}" bindinput="setAddress"/>
+    </view>
+    <view class="confirm-i">
+      <view class="confirm" @tap="confirm">确定</view>
+    </view>
+    <view class="select-address {{isPickerShow?'active':''}}">
+      <view class="bg" @tap="close"></view>
+      <view class="in">
+        <view class="tabs">
+          <view class="tab {{currIndex==0?'active':''}}" @tap="selectTap(0)">
+            {{selectedProvinceData ? selectedProvinceData.name : '省份'}}
+
+
+          </view>
+          <view class="tab {{currIndex==1?'active':''}}" @tap="selectTap(1)">
+            {{selectedCityData ? selectedCityData.name : '城市'}}
+
+
+          </view>
+          <view class="tab {{currIndex==2?'active':''}}" @tap="selectTap(2)">
+            {{selectedAreaData ? selectedAreaData.name : '区县'}}
+
+
+          </view>
+          <view class="confirm" @tap="confirmAddress">确定</view>
+        </view>
+        <view class="cons">
+          <view class="con {{currIndex==0?'active':''}}">
+            <repeat for="{{provinces}}" key="index" index="index" item="item">
+              <view
+                class="item {{selectedProvinceData&&selectedProvinceData.id==item.id&&selectedCityData?'active':''}}"
+                data-index="{{index}}" @tap="selectProvince">{{item.name}}
+
+
+              </view>
+            </repeat>
+          </view>
+          <view class="con {{currIndex==1?'active':''}}">
+            <repeat for="{{citys}}" key="index" index="index" item="item">
+              <view class="item {{selectedCityData&&selectedCityData.id==item.id&&selectedAreaData?'active':''}}"
+                    data-index="{{index}}"
+                    @tap="selectCity">{{item.name}}
+
+
+              </view>
+            </repeat>
+          </view>
+          <view class="con {{currIndex==2?'active':''}}">
+            <repeat for="{{areas}}" key="index" index="index" item="item">
+              <view class="item {{selectedAreaData&&selectedAreaData.id==item.id?'active':''}}" data-index="{{index}}"
+                    @tap="selectArea">{{item.name}}
+
+
+              </view>
+            </repeat>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import {
+    updateAddressById,
+    addAddressByUserId,
+    getAddressById,
+    getProvinces,
+    getCitysByParentId,
+    getAreasByParentId
+  } from '@/api/api'
+  export default class addressManage extends wepy.page {
+    config = {
+    }
+
+    data = {
+      title: '',
+      countryId: 0,
+      provinces: null,
+      citys: null,
+      areas: null,
+      selectedProvinceData: null,
+      selectedCityData: null,
+      selectedAreaData: null,
+      isPickerShow: false,
+      currIndex: 0,
+      addressShow: '',
+      name: '',
+      mobile: '',
+      address: ''
+    }
+
+    components = {}
+
+    methods = {
+      setName(event){
+        this.name = event.detail.value
+      },
+      setMobile(event){
+        this.mobile = event.detail.value
+      },
+      setAddress(event){
+        this.address = event.detail.value
+      },
+      confirm() {
+        if (!this.name) {
+          wepy.showToast({
+            title: '请输入姓名',
+            icon: 'none',
+            duration: 200
+          })
+          return
+        }
+        if (!this.mobile) {
+          wepy.showToast({
+            title: '请输入电话',
+            icon: 'none',
+            duration: 200
+          })
+          return
+        }
+        if (!this.selectedAreaData) {
+          wepy.showToast({
+            title: '请选择地区',
+            icon: 'none',
+            duration: 200
+          })
+          return
+        }
+        if (!this.address) {
+          wepy.showToast({
+            title: '请输入详细街道地址',
+            icon: 'none',
+            duration: 200
+          })
+          return
+        }
+        if (typeof this.id !== 'undefined') {
+          this.updateAddressById()
+        } else {
+          this.addAddressByUserId()
+        }
+      },
+      confirmAddress() {
+        if (!this.selectedProvinceData) {
+          wepy.showToast({
+            title: '请选择省份',
+            icon: 'none',
+            duration: 200
+          })
+          return
+        }
+        if (!this.selectedCityData) {
+          wepy.showToast({
+            title: '请选择城市',
+            icon: 'none',
+            duration: 200
+          })
+          return
+        }
+        if (!this.selectedAreaData) {
+          wepy.showToast({
+            title: '请选择地区',
+            icon: 'none',
+            duration: 200
+          })
+          return
+        }
+        this.isPickerShow = false
+        this.addressShow = this.selectedProvinceData.name + ' ' + this.selectedCityData.name + ' ' + this.selectedAreaData.name
+      },
+      confirmProvince(data) {
+        console.log(data)
+      },
+      selectAddress() {
+        this.isPickerShow = true
+      },
+      async selectProvince(e) {
+        let index = e.currentTarget.dataset.index
+        this.selectedProvinceData = this.provinces[index]
+        this.selectedCityData = null
+        this.selectedAreaData = null
+        await this.getCitysByParentId()
+        this.currIndex = 1
+        this.$apply()
+      },
+      async selectCity(e) {
+        let index = e.currentTarget.dataset.index
+        this.selectedCityData = this.citys[index]
+        this.selectedAreaData = null
+        await this.getAreasByParentId()
+        this.currIndex = 2
+        this.$apply()
+      },
+      async selectArea(e) {
+        let index = e.currentTarget.dataset.index
+        this.selectedAreaData = this.areas[index]
+      },
+      selectTap(index) {
+        let index1 = parseInt(index)
+        this.currIndex = index1
+      },
+      close() {
+        this.isPickerShow = false
+      }
+    }
+
+    async getProvinces() {
+      let _this = this
+      let param = {token: wepy.getStorageSync('token')}
+      let res = await getProvinces(param)
+      if (res.data.code === 200) {
+        this.provinces = res.data.data
+      }
+    }
+
+    async getCitysByParentId() {
+      let _this = this
+      let param = {token: wepy.getStorageSync('token'), id: this.selectedProvinceData.id}
+      let res = await getCitysByParentId(param)
+      if (res.data.code === 200) {
+        this.citys = res.data.data
+      }
+    }
+
+    async getAreasByParentId() {
+      let _this = this
+      let param = {token: wepy.getStorageSync('token'), id: this.selectedCityData.id}
+      let res = await getAreasByParentId(param)
+      if (res.data.code === 200) {
+        this.areas = res.data.data
+      }
+    }
+
+    async updateAddressById() {
+      let _this = this
+      let param = {
+        token: wepy.getStorageSync('token'),
+        id: _this.id,
+        name: _this.name,
+        mobile: _this.mobile,
+        address: _this.address,
+        province_id: _this.selectedProvinceData.id,
+        city_id: _this.selectedCityData.id,
+        area_id: _this.selectedAreaData.id,
+      }
+      let res = await updateAddressById(param)
+      if (res.data.code === 200) {
+        wepy.showToast({
+          title: '修改成功',
+          icon: 'none',
+          duration: 200
+        })
+        wepy.navigateBack({
+          delta: 1
+        })
+      } else {
+        wepy.showToast({
+          title: '修改失败',
+          icon: 'none',
+          duration: 200
+        })
+      }
+    }
+
+    async addAddressByUserId() {
+      let _this = this
+      let param = {
+        token: wepy.getStorageSync('token'),
+        name: _this.name,
+        mobile: _this.mobile,
+        address: _this.address,
+        province_id: _this.selectedProvinceData.id,
+        city_id: _this.selectedCityData.id,
+        area_id: _this.selectedAreaData.id,
+      }
+      let res = await addAddressByUserId(param)
+      if (res.data.code === 200) {
+        wepy.showToast({
+          title: '添加成功',
+          icon: 'none',
+          duration: 200
+        })
+        wepy.navigateBack({
+          delta: 1
+        })
+      } else {
+        wepy.showToast({
+          title: '添加失败',
+          icon: 'none',
+          duration: 200
+        })
+      }
+    }
+
+    async init() {
+      this.setId()
+      this.setTitle()
+      if (typeof this.id !== 'undefined') {
+        await this.getAddressById()
+        await this.getCitysByParentId()
+        await this.getAreasByParentId()
+      }
+      await this.getProvinces()
+      this.$apply()
+    }
+
+    setId() {
+      let _this = this
+      let pages = _this.getCurrentPages()
+      let page = pages[pages.length - 1]
+      let options = page.options
+      this.id = options.id
+    }
+
+    setTitle() {
+      let _this = this
+      let title
+      if (typeof this.id !== 'undefined') {
+        title = '编辑地址'
+      } else {
+        title = '新增地址'
+      }
+      _this.title = title
+      wepy.setNavigationBarTitle({
+        title: title
+      })
+    }
+
+    async getAddressById() {
+      let res = await getAddressById({id: this.id})
+      if (res.data.code === 200) {
+        this.addressShow = res.data.data[0].province_name + ' ' + res.data.data[0].city_name + ' ' + res.data.data[0].area_name
+        this.name = res.data.data[0].name
+        this.mobile = res.data.data[0].mobile
+        this.address = res.data.data[0].address
+        this.selectedProvinceData = {id: res.data.data[0].province_id, name: res.data.data[0].province_name}
+        this.selectedCityData = {id: res.data.data[0].city_id, name: res.data.data[0].city_name}
+        this.selectedAreaData = {id: res.data.data[0].area_id, name: res.data.data[0].area_name}
+      }
+    }
+
+    onLoad() {
+      this.init()
+    }
+  }
+</script>
