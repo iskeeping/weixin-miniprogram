@@ -1,9 +1,9 @@
 ### 预览
 
-<div><img src="preview1.jpg" width="540"/></div>
-<div><img src="preview2.jpg" width="540"/></div>
-<div><img src="preview3.jpg" width="540"/></div>
-<div><img src="preview4.jpg" width="540"/></div>
+<div><img src="preview1.jpg" width="375"/></div>
+<div><img src="preview2.jpg" width="375"/></div>
+<div><img src="preview3.jpg" width="375"/></div>
+<div><img src="preview4.jpg" width="375"/></div>
 
 ### 安装使用
 
